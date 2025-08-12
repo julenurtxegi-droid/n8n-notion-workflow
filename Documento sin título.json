@@ -1,0 +1,72 @@
+﻿{
+  "name": "Notion Workflow with Create Task & Get User ID",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "crear-tarea",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [-120, 240],
+      "name": "Webhook Create Task"
+    },
+    {
+      "parameters": {
+        "pageId": {
+          "__rl": true,
+          "value": "1a426eb585a2804f95e4ffa0ee79c920",
+          "mode": "id"
+        },
+        "properties": "={\n  \"Tarea\": {\n    \"title\": [{\n      \"text\": {\n        \"content\": \"={{$json['title']}}\"\n      }\n    }]\n  },\n  \"Proyecto\": {\n    \"relation\": [{ \"id\": \"f2d78245-4cae-4928-a069-4735d70bcca4\" }]\n  },\n  \"Responsables\": {\n    \"people\": [{ \"id\": \"44bc05d3-b6f0-4d32-9fa0-3bb3f1afae74\" }]\n  },\n  \"Fecha de entrega\": {\n    \"date\": {\n      \"start\": \"={{$json['due_date']}}\"\n    }\n  },\n  \"TIPO\": {\n    \"select\": { \"name\": \"={{$json['type']}}\" }\n  },\n  \"URGENCIA\": {\n    \"number\": \"={{$json['urgency']}}\"\n  },\n  \"Estado\": {\n    \"select\": { \"name\": \"={{$json['status']}}\" }\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [120, 240],
+      "name": "Create a page",
+      "credentials": {
+        "notionApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "Notion account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "path": "get-user-id",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [-120, 480],
+      "name": "Webhook Get User ID"
+    },
+    {
+      "parameters": {
+        "pageId": "={{$json[\"pageId\"]}}"
+      },
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [120, 480],
+      "name": "Get Page",
+      "credentials": {
+        "notionApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "Notion account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook Create Task": {
+      "main": [[{ "node": "Create a page", "type": "main", "index": 0 }]]
+    },
+    "Webhook Get User ID": {
+      "main": [[{ "node": "Get Page", "type": "main", "index": 0 }]]
+    }
+  },
+  "active": true,
+  "settings": {},
+  "id": "notion_workflow"
+}
