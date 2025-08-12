@@ -1,5 +1,5 @@
 ﻿{
-  "name": "Notion Workflow with Create Task & Get User ID",
+  "name": "n8n-notion-workflow.json",
   "nodes": [
     {
       "parameters": {
@@ -69,4 +69,5 @@
   "active": true,
   "settings": {},
   "id": "notion_workflow"
+
 }
